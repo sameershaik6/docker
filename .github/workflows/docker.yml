@@ -7,8 +7,8 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  ECR_REGISTRY: 761204575501.dkr.ecr.us-east-1.amazonaws.com
-  ECR_REPOSITORY: img7
+  ECR_REGISTRY: 210948569624.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REPOSITORY: img1
   IMAGE_TAG: latest
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
-          host: 3.92.62.90
+          host: 3.236.166.117
           username: root
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
@@ -48,13 +48,13 @@ jobs:
             # Pull the newly pushed image
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
-            # Free up port 5001 and remove any existing img7 container
-            docker stop img7 || true
-            docker rm img7 || true
+            # Free up port 5001 and remove any existing img1 container
+            docker stop img1 || true
+            docker rm img1 || true
 
             # Run updated container
             docker run -d \
-              --name img7 \
+              --name img1 \
               --restart unless-stopped \
               -p 5001:5000 \
               ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
